@@ -26,7 +26,7 @@ The basis of comparison for this article is a scalability test that takes a cete
 
 The test that implements the verification of scalability is now part of the test suite that ships with the forthcoming release of the RabbitMQ Java client, and is currently available in the RabbitMQ source tree for those who want to run it for themselves.
 
-The test has been designed to operate in an exponential fashion in order to highlight the cost of transitioning from a one order of magnitude to another. By choosing an exponential strategy, it becomes easy to identify super-linear runtime complexities in the resulting graph, because a linear cost curve will follow a flat line when plotted on a logarithmic scale.
+The test has been designed to operate in an exponential fashion in order to highlight the cost of transitioning from a one order of magnitude to another. By choosing an exponential strategy, it becomes easy to identify super-linear runtime complexities when the points are plotted to a logarithmic scale.
 
 The test class, called ScalabilityTest, was executed using the following command line arguments:
 
@@ -39,7 +39,7 @@ The meaning of these parameters are as follows:
 * y - the exponent for the amount of bindings per queue to create, i.e. 2 ^ 11;
 * f - this is the label of the time individual series for plotting purposes;
 
-Because of the exponential nature of the test, it is necessary to limit extreme orders of magnitude on both axis's at the same time. If one did not do so, running the test for 2 ^ 15 queues and 2 ^ 11 bindings per queue at the same time would take a prohibitively long time to execute. To avoid this, each iteration of the benchmark is limited by the average exponent of each axis, i.e. (x+y) / 2. The effect of this is that the plotted results will form a triangle along this average.
+Because of the exponential nature of the test, it is necessary to limit extreme orders of magnitude on both axis's at the same time. If one did not do so, running the test for 2 ^ 15 queues and 2 ^ 11 bindings per queue at the same time would take a prohibitively long time to execute. To avoid this, each iteration of the benchmark is limited by the maximum exponent of each axis, i.e. (x+y) / 2. The effect of this is that the plotted results will form a triangle along this average.
 
 To get a full description of all of the possible command line arguments, you can run:
 
@@ -50,6 +50,8 @@ To get a full description of all of the possible command line arguments, you can
 It must be pointed out that this test is designed to verify the overall runtime complexity of the routing functionality in Rabbit with respect to the efficiency of binding creation, deletion and the routing of messages. The results that I am presenting are indicative of the _orders of magnitude_ that one can reasonably expect from a default RabbitMQ installation on commodity hardware. _For the record_, these tests were deliberately run on a low powered old desktop machine. Hence, the results _should_ not be interpreted as the absolute performance characteristics of RabbitMQ on appropriately resourced hardware.
 
 The following graphs have been plotted against logarithmic scales. This is because the test case uses exponents to define the amount of queues and bindings per queue that should be created for every level of the test.
+
+The units of the graph are in microseconds, but as indicated above, one should not read too much into the absolute value of these particular results. Your mileage may vary.
 
 ### Queue/Binding Creation And Deletion
 
